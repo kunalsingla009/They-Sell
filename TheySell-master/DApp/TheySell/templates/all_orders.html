@@ -1,0 +1,33 @@
+{% extends 'basic.html' %} {% block title %}All Your Orders{% endblock %}
+{% block body %} {% load static %}
+<div style="text-align: center;margin:100px">
+    <h2 style="padding-bottom: 20px;color:#782E9A">All Orders</h2>
+
+    {% for order in all_orders %}
+
+    <div class="card mb-3" style="min-width: 100%;">
+        <div class="card-body" style="display:flex;border: 1px solid #F0BB62">
+            <h5 class="card-title" style="min-width: 25%;color:#782E9A">ORDER ID: <span id="order_id_num" style="color:#F9A926">{{order.order_id}}</span>
+            </h5>
+
+            <h5 class="card-title" style="min-width: 25%;color:#782E9A">TOTAL AMOUNT: <span
+                    id="total_amount_num" style="color:#F9A926">{{order.amount}}</span></h5>
+
+            <h5 class="card-title" style="min-width: 25%;color:#782E9A">ITEM IDs: <span id="item_count_num" style="color:#F9A926">{{order.item_ids}}</span>
+            </h5>
+
+            <a href="/ordersummary/{{order.order_id}}" style="min-width: 10%;"><button class="btn" style="background-color: #F0BB62;color:white">View Order</button></a>
+
+            {% if is_seller and order.seller_delivered or not is_seller and order.buyer_delivered %}
+            <button class="btn" style="background-color: #F0BB62;color:white" disabled>Order Delivered</button>
+            {% else %}
+            <a href="/orderdelivered/{{order.order_id}}" style="min-width: 10%;">
+                <button class="btn" style="background-color: #F0BB62;color:white" >Order Delivered</button>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+{% endblock %}

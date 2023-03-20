@@ -1,0 +1,142 @@
+{% extends 'sellers/basic.html' %}
+
+{% block css %}
+
+<style>
+    .form-style-5 {
+        max-width: 500px;
+        padding: 10px 20px;
+        background: #f4f7f8;
+        margin: 10px auto;
+        padding: 20px;
+        background: #f4f7f8;
+        border-radius: 8px;
+        font-family: Georgia, "Times New Roman", Times, serif;
+    }
+
+    .form-style-5 fieldset {
+        border: none;
+    }
+
+    .form-style-5 legend {
+        font-size: 1.4em;
+        margin-bottom: 10px;
+    }
+
+    .form-style-5 label {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .form-style-5 input[type="text"],
+    .form-style-5 input[type="date"],
+    .form-style-5 input[type="datetime"],
+    .form-style-5 input[type="email"],
+    .form-style-5 input[type="number"],
+    .form-style-5 input[type="search"],
+    .form-style-5 input[type="time"],
+    .form-style-5 input[type="url"],
+    .form-style-5 textarea,
+    .form-style-5 select {
+        font-family: Georgia, "Times New Roman", Times, serif;
+        background: rgba(255, 255, 255, .1);
+        border: none;
+        border-radius: 4px;
+        font-size: 15px;
+        margin: 0;
+        outline: 0;
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        background-color: #e8eeef;
+        color: #8a97a0;
+        -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
+        margin-bottom: 30px;
+    }
+
+    .form-style-5 input[type="text"]:focus,
+    .form-style-5 input[type="date"]:focus,
+    .form-style-5 input[type="datetime"]:focus,
+    .form-style-5 input[type="email"]:focus,
+    .form-style-5 input[type="number"]:focus,
+    .form-style-5 input[type="search"]:focus,
+    .form-style-5 input[type="time"]:focus,
+    .form-style-5 input[type="url"]:focus,
+    .form-style-5 textarea:focus,
+    .form-style-5 select:focus {
+        background: #d2d9dd;
+    }
+
+    .form-style-5 select {
+        -webkit-appearance: menulist-button;
+        height: 35px;
+    }
+
+    .form-style-5 .number {
+        background: #782E9A;
+        color: #F4EEA9;
+        height: 30px;
+        width: 30px;
+        display: inline-block;
+        font-size: 0.8em;
+        margin-right: 4px;
+        line-height: 30px;
+        text-align: center;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+        border-radius: 15px 15px 15px 0px;
+    }
+
+    .form-style-5 input[type="submit"],
+    .form-style-5 input[type="button"] {
+        position: relative;
+        display: block;
+        padding: 19px 39px 18px 39px;
+        color: #FFF;
+        margin: 0 auto;
+        background: #F0BB62;
+        font-size: 18px;
+        text-align: center;
+        font-style: normal;
+        width: 100%;
+        border: 1px solid #F4EEA9;
+        border-width: 1px 1px 3px;
+        margin-bottom: 10px;
+    }
+
+    .form-style-5 input[type="submit"]:hover,
+    .form-style-5 input[type="button"]:hover {
+        background: #109177;
+    }
+</style>
+{% endblock css %}
+
+{% block body %}
+
+<div class="form-style-5" style="margin-top: 20px;">
+    <!-- Displaying the form -->
+    <form method="POST" action="{% url 'savegood' %}" enctype="multipart/form-data">{% csrf_token %}
+        <fieldset>
+            <legend style="color: #782E9A;"><span class="number">1</span> Basic</legend>
+            <label for="good_name" style="color: #782E9A;">Name</label>
+            <input type="text" name="good_name" id="good_name">
+            <label for="good_price" style="color: #782E9A;">Price (in rupees)</label>
+            <input type="number" step="any" name="good_price" id="good_price">
+            <label for="good_image" style="color: #782E9A;">Image</label>
+            <input type="file" accept="image/png, image/jpeg" name="good_image" id="good_image">
+
+        </fieldset>
+        <br>
+        <fieldset>
+            <legend style="color: #782E9A;"><span class="number">2</span> Description</legend>
+            <textarea name="good_desc" id="good_desc" cols="30" rows="10"></textarea>
+        </fieldset>
+        <input style="background-color: #F0BB62;" type="submit" value="ADD" />
+    </form>
+</div>
+
+
+
+{% endblock body %}

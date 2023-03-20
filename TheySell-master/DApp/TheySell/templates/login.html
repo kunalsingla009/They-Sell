@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Login</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <link rel="stylesheet" href="/media/css/login.css">
+</head>
+
+<body>
+
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form action="{% url 'signupuser' %}" method="POST" id="signupForm" enctype="multipart/form-data">
+                <h1 style="color: #782E9A;">Create Account</h1>
+                
+                <span>Use your email for registration</span>
+                <input type="text" placeholder="Full Name" name="fullname" required/>
+                <input type="email" placeholder="Email" name="email" required/>
+                <input type="password" placeholder="Password" name="password" required/>
+                <label style="color: #782E9A;" for="adharcard" id="labeladharcard" hidden>Upload Aadhar Card:</label>
+                <input type="file" placeholder="Aadhaar Card" name="aadhaarcard" id="aadhaarcard" hidden/>
+                <input type="text" placeholder="Seller ID" name="sellerid" id="sellerid" hidden/>
+                <input type="text" placeholder="Account Address" name="accadd" id="accadd" hidden/>
+                <div style="width: 80%;padding: 12px">
+                    <label for="is_seller" style="color: #782E9A;">Are you a Seller?</label>
+                    <input type="checkbox" style="width: 24% !important;padding-top: 0px !important;margin-top: 2px !important;" name="is_seller" id="is_seller" onclick="seller_details()"/>
+                </div>
+                <button style="background-color: #F0BB62;border:#F0BB62" type="submit">Sign Up</button>
+            </form>
+        </div>
+        <div class="form-container sign-in-container">
+            <form action="{% url 'login' %}" method="POST">
+                <h1 style="color: #782E9A;">Sign in</h1>
+                <input type="email" placeholder="Email" name="email" required/>
+                <input type="password" placeholder="Password" name="password" required/>
+                <button style="background-color: #F0BB62;border:#F0BB62">Sign In</button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay" style="background: #782E9A;">
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome Back!</h1>
+                    <p>To keep connected with us please login with your personal info</p>
+                    <button style="background-color: #F0BB62;" class="ghost" id="signIn">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Enter your personal details and start journey with us</p>
+                    <button style="background-color: #F0BB62;" class="ghost" id="signUp">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.18.0/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyCAdmlGTu7vpohzDeuP-ciFS79KQufID10",
+          authDomain: "pridebazaar-e519b.firebaseapp.com",
+          projectId: "pridebazaar-e519b",
+          storageBucket: "pridebazaar-e519b.appspot.com",
+          messagingSenderId: "286375718383",
+          appId: "1:286375718383:web:f1c6dcab112c8dd7b69a1a",
+          measurementId: "G-L443Z39BP4"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+      </script>
+    <script src="/media/js/login.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="/media/js/shop.js"></script>
+</body>
+
+</html>

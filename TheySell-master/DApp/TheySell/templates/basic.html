@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  {% block head %}{% endblock head %}
+  <title>{% block title %} {% endblock %}</title>
+  <style>
+    #visible_mac{
+      display: inline-block;
+      padding-top: .3125rem;
+      padding-bottom: .3125rem;
+      margin-right: 1rem;
+      font-size: 1.25rem;
+      line-height: inherit;
+      white-space: nowrap;
+  }
+    {% block css %}
+
+      {% endblock %}
+  </style>
+</head>
+
+<body>
+
+  <nav id="basicNavbar" class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: #782E9A !important;">
+    <a class="navbar-brand" href="/" id="visible_mac"><img style="width: 80px;" src="/media/images/main_logo.png" alt=""></a>
+    <button class="navbar-toggler" id="make_brand" type="button" data-toggle="collapse"
+      data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'userprofile' %}">Profile</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/allorders">All Orders</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/seller/home">Manage</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Welcome {{request.session.usrname}}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  
+  {% if messages %}
+  {% for message in messages %}
+  <div
+    class="alert {% if message.tags %}alert-{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}danger{% else %}{{ message.tags }}{% endif %}{% endif %}"
+    id="alertmsg" role="alert">{{ message }}</div>
+  {% endfor %}
+  {% endif %}
+
+  {% block body %}
+  {% endblock %} {% load static %}
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+    integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+    crossorigin="anonymous"></script>
+  <script>
+    let isMobile = window.matchMedia("only screen and (max-width: 760px)").matches;
+    if (isMobile) {
+      $('#visible_mac').hide();
+      $('make_brand').attr('class', "navbar-brand navbar-toggler")
+      $("#basicNavbar").append(`<b><a href="/shop" id="visible_mac" style='color:#FFFFFF;' >Farm Assistant</a></b>`)
+    }
+    //Add popover to cart
+    $('#popcart').popover();
+    $('#alertmsg').fadeIn().delay(3000).fadeOut();
+  </script>
+  {% block js %} {% endblock %}
+</body>
+
+</html>

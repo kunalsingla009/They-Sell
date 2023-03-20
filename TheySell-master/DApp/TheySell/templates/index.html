@@ -1,0 +1,175 @@
+{% extends 'basic.html' %} {% block title %}Welcome To They Sell{% endblock %} {% block css %}
+    .col-md-3 {
+        display: inline-block;
+        margin-left: -4px;
+    }
+    
+    .carousel-indicators .active {
+        background-color: blue;
+    }
+    
+    .col-md-3 img {
+        max-width: 170px;
+        max-height:200px;
+        min-width: 170px;
+        min-height:200px;
+    }
+    
+    body .carousel-indicator li {
+        background-color: blue;
+    }
+    
+    body .carousel-indicators {
+        bottom: -35px;
+    }
+    
+    body .carousel-control-prev-icon, body .carousel-control-next-icon {
+        background-color: blue;
+    }
+    
+    .carousel-control-prev,
+    .carousel-control-next {
+        top:
+            auto;
+        bottom: auto;
+        padding-top: 222px;
+    }
+    
+    body .no-padding {
+        padding-left: 0, padding-right: 0;
+    }
+    
+    .carousel-indicators li {
+        background-color: #7c58d4;
+    }
+    
+    @media (min-width: 767px) {
+        .hidden-xs {
+            display: none;
+        }
+    }
+    
+    @media (max-width: 767px) {
+        #popcart {
+            margin-top: 10px;
+        }
+    
+    }
+{% endblock %} {% block body %} {% load static %}
+<div class="container" id="shopping_container">
+</div>
+{% endblock %}
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+<script src="/media/js/shop.js"></script>
+<script>
+    var is_start;
+    $("#basicNavbar").append(`<button type="button" style="background-color:#F0BB62;color:white" class="btn mx-2" id="popcart" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true" data-content="Vivamus
+sagittis lacus vel augue laoreet rutrum faucibus.">
+  Cart(<span id="cart">0</span>)
+</button>`);
+
+    localStorage.setItem('cart',JSON.stringify({{carty|safe}}))
+
+    function addtoCart(idstr){
+        cart = JSON.parse(localStorage.getItem('cart'));
+        seller = document.getElementById("seller" + idstr).innerHTML;
+        if(localStorage.getItem("seller_in_cart") == "" || localStorage.getItem("seller_in_cart") == seller){
+            idstr = idstr.toString();
+            console.log("herere" + idstr)
+            qty = 1;
+            let idst = idstr;
+            name = document.getElementById("name" + idstr).innerHTML;
+            price = document.getElementById("price" + idstr).innerHTML;
+            image = document.getElementById("image" + idstr).getAttribute('src');
+            cart[idstr] = [qty, name, price, image, seller];
+            document.getElementById('div' + idstr).innerHTML = `<button id="A${idst}" style="background-color:#F0BB62;color:white" class="btn cart" disabled>Added to cart</button>`;
+            localStorage.setItem("seller_in_cart",seller)
+            updateCart(cart);
+        }
+        else{
+            alert("Please add goods only from one seller!")
+        }
+    };
+
+    function updatePopover(cart) {
+        var popstr = "";
+        popstr = popstr + "<h5>Cart for your items in Myshopping Cart</h5><div class='mx-2 my-2'>";
+        var i = 1;
+        for (var item in cart) {
+            if (cart[item][0] != 0) {
+                popstr = popstr + "<b>" + i + "</b>. ";
+                popstr = popstr + document.getElementById('name' + item).innerHTML.slice(0, 19) + "..." + " Qty:" + cart[item][0] + " " + "Price:" + cart[item][2] + "<br>";
+                i = i + 1;
+            } else {
+                for (var item in cart) {
+                    if (cart[item][0] == 0) {
+                        delete cart[item];
+                        updateCart(cart);
+                    }
+                }
+            }
+        }
+        popstr = popstr + "</div> <a href='/cart'><button class='btn' style='background-color:#F0BB62;color:white' id='checkout'>View Cart</button></a> <button class='btn' style='background-color:#F0BB62;color:white'  onclick='clearCart()' id='clearcart'>Clear Cart</button>";
+
+        document.getElementById('popcart').setAttribute('data-content', popstr);
+        if (is_start != 0) {
+            is_start = is_start - 1;
+        }
+        else {
+            $('#popcart').trigger("dblclick");
+        }
+    }
+
+    function clearCart() {
+        cart = JSON.parse(localStorage.getItem('cart'));
+        for (var item in cart) {
+            document.getElementById('div' + item).innerHTML = '<button id="' + item + '" class="btn btn-primary cart">Add to cart</button>';
+        }
+        localStorage.clear();
+        cart = {};
+        updateCart(cart);
+
+    }
+
+    function updateCart(cart) {
+        var sum = 0;
+        for (var item in cart) {
+            sum = sum + cart[item][0];
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        if(sum == 0){
+            localStorage.setItem("seller_in_cart", "")
+        }
+        //dynamically update the cart in the database
+        $.ajax({
+            url: '/ajax/cartUpdate/',
+            data: {
+                'cart': JSON.stringify(cart)
+            }
+        });
+        document.getElementById('cart').innerHTML = sum;
+        updatePopover(cart);
+    }
+
+    $("#popcart").popover({ trigger: "manual" }).click(function () {
+        window.location = "/cart";
+    })
+    $("#popcart").popover({ trigger: "manual" }).dblclick(function () {
+        var pop = $(this);
+
+        pop.popover("show")
+        pop.on('shown.bs.popover', function () {
+            setTimeout(function () {
+                pop.popover("hide")
+            }, 5700);
+        })
+    })
+
+    //To refresh page whenever the user navigates from some other page to this one
+    if (performance.navigation.type == 2) {
+        location.reload(true);
+    }
+
+</script>
+{% endblock %}

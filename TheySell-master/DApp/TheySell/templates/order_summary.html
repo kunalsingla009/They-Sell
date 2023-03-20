@@ -1,0 +1,141 @@
+{% extends 'basic.html' %} {% block title %}Account Summary{% endblock %}
+{% block head %}
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"> -->
+{% endblock head %}
+{% block css %}
+.btn-info, .lead {
+margin-top: 20px;
+}
+
+{% endblock %}
+
+{% block body %} {% load static %} {% load mathfilters %}
+<div class="container" id="template_invoice">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="invoice-title">
+                <h2>Invoice</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <p class="lead">Order # {{curr_order.order_id}}</p>
+        </div>
+        <div class="col-md-3">
+            <button class="dwnbtn btn btn-info pull-right" style="background-color: #F0BB62;border:none">Download</button>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-info pull-right" style="background-color: #F0BB62; border:none" onclick="VerifyOrder({{curr_order.order_id}})">Verify Order</button>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <address>
+                <strong>Billed To:</strong><br>
+                {{curr_order.address}}<br>
+                {{curr_order.city}}<br>
+                {{curr_order.state}}<br>
+                {{curr_order.zip_code}}
+            </address>
+        </div>
+        <div class="col-md-6 text-right">
+            <address>
+                <strong>Seller Account Address</strong><br>
+                <span id="seller_address">
+                {{curr_order.seller_address}}
+                </span>
+            </address>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <address>
+                <strong>Payment Account Address:</strong><br>
+                <span id="buyer_address">
+                {{curr_order.buyer_address}}
+                </span>
+            </address>
+        </div>
+        <div class="col-md-6 text-right">
+            <address>
+                <strong>Order Date:</strong><br>
+                {{curr_order.order_date}}<br><br>
+            </address>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><strong>Order summary</strong></h3>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <td><strong>Item</strong></td>
+                                    <td class="text-center"><strong>Price</strong></td>
+                                    <td class="text-center"><strong>Quantity</strong></td>
+                                    <td class="text-right"><strong>Totals</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in all_items %}
+                                <tr>
+                                    <td>{{item.1}}</td>
+                                    <td class="text-center">{{item.2}} AC</td>
+                                    <td class="text-center">{{item.0}}</td>
+                                    <td class="text-right">{{item.2|mul:item.0}} AC</td>
+                                </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td class="no-line"></td>
+                                    <td class="no-line"></td>
+                                    <td class="no-line text-center"><strong>Total</strong></td>
+                                    <td class="no-line text-right"> <span id="order_total"> {{curr_order.amount}} </span> AC</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+<script src="/media/js/user_profile.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $(".dwnbtn").click(function() {
+          var doc = new jsPDF("p", "pt", "letter"),
+              source = $("#template_invoice")[0],
+              margins = {
+                top: 40,
+                bottom: 60,
+                left: 40,
+                width: 430
+              };
+          doc.fromHTML(
+            source, // HTML string or DOM elem ref.
+            margins.left, // x coord
+            margins.top,
+            {
+              // y coord
+              width: margins.width // max width of content on PDF
+            },
+            function(dispose) {
+              // dispose: object with X, Y of the last line add to the PDF
+              //          this allow the insertion of new lines after html
+              doc.save({{curr_order.order_id | safe}}+".pdf");
+            },
+            margins
+          );
+        });
+      });
+</script>
+{% endblock %}
