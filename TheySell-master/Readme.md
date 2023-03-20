@@ -88,10 +88,4 @@ cd TheySell/DApp/TheySell
 
 <br>
 
-## The woman👩🏻‍💻 behind this initiative:
 
-<table>
-  <tr>
-    <td align="center"><a href="https://github.com/aishux"><img src="https://avatars.githubusercontent.com/u/61228436?v=4" width="100px;" alt=""/><br /><sub><b>Aishwarya Nathani</b></sub></a><br /></td>
-  </tr>
-</table>
